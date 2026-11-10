@@ -2,51 +2,77 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="color-scheme" content="light">
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="color-scheme" content="light only" />
+  <meta name="supported-color-schemes" content="light" />
   <title>A Little Bouquet for Mahdis</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap"
-    rel="stylesheet">
+    rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
     :root {
-      color-scheme: light;
+      color-scheme: light only;
       forced-color-adjust: none;
     }
 
+    html,
     body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      width: 100%;
+      height: 100%;
+      height: 100dvh;
+      /* Dynamic viewport height respects mobile navigation bars */
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
       touch-action: none;
       user-select: none;
       -webkit-user-select: none;
-      overflow: hidden;
       background-color: #FAF5EE;
     }
 
-    .serif-title {
-      font-family: 'Playfair Display', serif;
-    }
-
     .glass-card {
-      background: rgba(255, 255, 255, 0.78);
+      background: rgba(255, 255, 255, 0.82) !important;
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.85);
-      box-shadow: 0 10px 30px -5px rgba(180, 150, 130, 0.12), 0 4px 6px -2px rgba(180, 150, 130, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.85) !important;
+      box-shadow: 0 10px 30px -5px rgba(180, 150, 130, 0.15);
     }
 
     .glass-card-night {
-      background: rgba(30, 32, 48, 0.85) !important;
+      background: rgba(30, 32, 48, 0.88) !important;
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.15) !important;
-      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4) !important;
+      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    /* Fixed bottom dock that respects mobile browser toolbars and home indicator safe areas */
+    #dock-wrapper {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+      z-index: 40;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    #instruction-pill {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: calc(5.2rem + env(safe-area-inset-bottom, 0px));
+      z-index: 30;
+      pointer-events: none;
     }
 
     @keyframes subtlePulse {
@@ -80,12 +106,12 @@
   </style>
 </head>
 
-<body class="w-screen h-screen relative select-none">
+<body class="relative select-none">
   <div id="canvas-container" class="absolute inset-0 z-0"></div>
 
   <!-- Header -->
-  <header class="absolute top-0 left-0 right-0 z-20 p-4 sm:p-6 flex justify-between items-start pointer-events-none">
-    <div class="pointer-events-auto max-w-[70vw]">
+  <header class="fixed top-0 left-0 right-0 z-20 p-4 sm:p-6 flex justify-between items-start pointer-events-none">
+    <div class="pointer-events-auto">
       <div
         class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-card text-xs font-semibold text-amber-950 mb-2 transition-all duration-500 shadow-sm"
         id="badge-pill">
@@ -94,15 +120,19 @@
         <span>Living Desktop Garden</span>
       </div>
 
-      <!-- Explicit inline styles for rock-solid contrast regardless of mobile browser forced dark-modes -->
-      <h1 class="serif-title text-2xl sm:text-3xl font-bold tracking-tight transition-colors duration-500"
-        id="main-title" style="color: #2c2c2c !important; -webkit-text-fill-color: #2c2c2c !important;">
-        Some flowers for you
-      </h1>
-      <p class="text-xs sm:text-sm font-medium mt-0.5 transition-colors duration-500" id="sub-title"
-        style="color: #555555 !important; -webkit-text-fill-color: #555555 !important;">
-        Drag to spin • Tap the vase to blossom
-      </p>
+      <!-- Vector SVG Title: completely immune to mobile browser dark-mode color inversion -->
+      <div class="w-[280px] sm:w-[360px]">
+        <svg viewBox="0 0 360 70" class="w-full h-auto overflow-visible select-none" xmlns="http://www.w3.org/2000/svg">
+          <text id="svg-main-title" x="0" y="32" font-family="'Playfair Display', serif" font-size="28"
+            font-weight="700" fill="#2c2c2c" style="transition: fill 0.5s ease;">
+            Some flowers for you
+          </text>
+          <text id="svg-sub-title" x="0" y="58" font-family="'Plus Jakarta Sans', sans-serif" font-size="13"
+            font-weight="500" fill="#555555" style="transition: fill 0.5s ease;">
+            Drag to spin • Tap the vase to blossom
+          </text>
+        </svg>
+      </div>
     </div>
 
     <!-- Quick Mode Buttons -->
@@ -130,26 +160,26 @@
     </div>
   </header>
 
-  <!-- Bottom Floating Dock -->
-  <div class="absolute bottom-6 left-0 right-0 z-20 flex justify-center items-center px-4 pointer-events-none">
+  <!-- Bottom Floating Dock (Anchored with fixed safe-area) -->
+  <div id="dock-wrapper">
     <div
-      class="pointer-events-auto glass-card px-4 py-3 rounded-3xl flex items-center gap-3 sm:gap-4 shadow-xl border border-white/60 transition-all duration-500"
+      class="pointer-events-auto glass-card px-4 py-2.5 sm:py-3 rounded-3xl flex items-center gap-3 sm:gap-4 shadow-xl border border-white/60 transition-all duration-500"
       id="action-dock">
       <button id="bloom-btn"
-        class="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-amber-100/90 hover:bg-amber-200 text-amber-900 font-semibold text-sm transition-all hover:scale-105 active:scale-95 shadow-sm">
+        class="flex items-center gap-2 px-4 py-2 rounded-2xl bg-amber-100/90 hover:bg-amber-200 text-amber-900 font-semibold text-sm transition-all hover:scale-105 active:scale-95 shadow-sm">
         <span class="text-base">🌸</span>
         <span class="hidden sm:inline">Add Blossom</span>
         <span class="sm:hidden">Bloom</span>
       </button>
 
       <button id="water-btn"
-        class="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-cyan-100/90 hover:bg-cyan-200 text-cyan-900 font-semibold text-sm transition-all hover:scale-105 active:scale-95 shadow-sm">
+        class="flex items-center gap-2 px-4 py-2 rounded-2xl bg-cyan-100/90 hover:bg-cyan-200 text-cyan-900 font-semibold text-sm transition-all hover:scale-105 active:scale-95 shadow-sm">
         <span class="text-base">💧</span>
         <span>Water</span>
       </button>
 
       <button id="letter-btn"
-        class="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-rose-100/90 hover:bg-rose-200 text-rose-900 font-semibold text-sm transition-all hover:scale-105 active:scale-95 shadow-sm relative">
+        class="flex items-center gap-2 px-4 py-2 rounded-2xl bg-rose-100/90 hover:bg-rose-200 text-rose-900 font-semibold text-sm transition-all hover:scale-105 active:scale-95 shadow-sm relative">
         <span class="text-base">💌</span>
         <span>Open Note</span>
         <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 rounded-full animate-bounce"></span>
@@ -157,15 +187,14 @@
     </div>
   </div>
 
-  <div id="instruction-pill"
-    class="absolute bottom-24 right-4 sm:right-auto sm:left-1/2 sm:-translate-x-1/2 z-20 pointer-events-none transition-opacity duration-700 pulse-hint">
+  <div id="instruction-pill" class="pulse-hint transition-opacity duration-700">
     <div
-      class="glass-card px-4 py-2 rounded-full text-xs font-semibold text-neutral-700 flex items-center gap-2 shadow-sm">
+      class="glass-card px-4 py-2 rounded-full text-xs font-semibold text-neutral-700 flex items-center gap-2 shadow-sm whitespace-nowrap">
       <span>✨ Tap the ceramic pot to plant more flowers</span>
     </div>
   </div>
 
-  <!-- Note Modal -->
+  <!-- Note Modal Envelope -->
   <div id="note-modal"
     class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-neutral-900/40 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
     <div id="modal-box"

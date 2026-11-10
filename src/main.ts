@@ -173,8 +173,8 @@ function toggleAtmosphere(): void {
   const themeBtn = document.getElementById('theme-btn');
   const badgePill = document.getElementById('badge-pill');
   const actionDock = document.getElementById('action-dock');
-  const mainTitle = document.getElementById('main-title');
-  const subTitle = document.getElementById('sub-title');
+  const svgMainTitle = document.getElementById('svg-main-title');
+  const svgSubTitle = document.getElementById('svg-sub-title');
 
   const targetBg = new THREE.Color(isNight ? NIGHT_BG : DAY_BG);
   const targetSunColor = new THREE.Color(isNight ? 0xB5C5FF : 0xfffaed);
@@ -194,15 +194,9 @@ function toggleAtmosphere(): void {
     document.body.style.backgroundColor = '#1E1B2E';
     if (themeBtn) themeBtn.innerHTML = '🌙';
 
-    // Override inline styles with forced light-purple for night mode
-    if (mainTitle) {
-      mainTitle.style.setProperty('color', '#f3e8ff', 'important');
-      mainTitle.style.setProperty('-webkit-text-fill-color', '#f3e8ff', 'important');
-    }
-    if (subTitle) {
-      subTitle.style.setProperty('color', '#d8b4fe', 'important');
-      subTitle.style.setProperty('-webkit-text-fill-color', '#d8b4fe', 'important');
-    }
+    // SVG fills for night mode (immune to browser inversion)
+    svgMainTitle?.setAttribute('fill', '#f3e8ff');
+    svgSubTitle?.setAttribute('fill', '#d8b4fe');
 
     actionDock?.classList.replace('glass-card', 'glass-card-night');
     badgePill?.classList.replace('glass-card', 'glass-card-night');
@@ -216,15 +210,9 @@ function toggleAtmosphere(): void {
     document.body.style.backgroundColor = '#FAF5EE';
     if (themeBtn) themeBtn.innerHTML = '☀️';
 
-    // Reset inline styles back to charcoal for day mode
-    if (mainTitle) {
-      mainTitle.style.setProperty('color', '#2c2c2c', 'important');
-      mainTitle.style.setProperty('-webkit-text-fill-color', '#2c2c2c', 'important');
-    }
-    if (subTitle) {
-      subTitle.style.setProperty('color', '#555555', 'important');
-      subTitle.style.setProperty('-webkit-text-fill-color', '#555555', 'important');
-    }
+    // SVG fills for day mode
+    svgMainTitle?.setAttribute('fill', '#2c2c2c');
+    svgSubTitle?.setAttribute('fill', '#555555');
 
     actionDock?.classList.replace('glass-card-night', 'glass-card');
     badgePill?.classList.replace('glass-card-night', 'glass-card');
