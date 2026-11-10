@@ -1,13 +1,214 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>flower-bouquet</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>A Little Bouquet for Mahdis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+      overflow: hidden;
+      background-color: #FAF5EE;
+    }
+
+    .serif-title {
+      font-family: 'Playfair Display', serif;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 10px 30px -5px rgba(180, 150, 130, 0.12), 0 4px 6px -2px rgba(180, 150, 130, 0.05);
+    }
+
+    .glass-card-night {
+      background: rgba(30, 32, 48, 0.8);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
+    }
+
+    @keyframes subtlePulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 0.9;
+      }
+
+      50% {
+        transform: scale(1.04);
+        opacity: 1;
+      }
+    }
+
+    .pulse-hint {
+      animation: subtlePulse 3s ease-in-out infinite;
+    }
+
+    .modal-enter {
+      opacity: 0;
+      transform: scale(0.92) translateY(12px);
+    }
+
+    .modal-active {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+  </style>
+</head>
+
+<body class="w-screen h-screen relative select-none">
+  <div id="canvas-container" class="absolute inset-0 z-0"></div>
+
+  <!-- Header -->
+  <header class="absolute top-0 left-0 right-0 z-20 p-5 sm:p-6 flex justify-between items-start pointer-events-none">
+    <div class="pointer-events-auto">
+      <div
+        class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-card text-xs font-medium text-amber-900/80 mb-2 transition-all duration-500"
+        id="badge-pill">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+        <span class="w-2 h-2 rounded-full bg-emerald-500 -ml-4"></span>
+        <span>Living Desktop Garden</span>
+      </div>
+      <h1
+        class="serif-title text-2xl sm:text-3xl font-semibold tracking-tight text-neutral-800 transition-colors duration-500"
+        id="main-title">
+        Some flowers for you
+      </h1>
+      <p class="text-xs sm:text-sm text-neutral-500 font-normal mt-0.5" id="sub-title">
+        Drag to spin • Tap the vase to blossom
+      </p>
+    </div>
+
+    <!-- Quick Mode Buttons -->
+    <div class="pointer-events-auto flex items-center gap-2.5">
+      <button id="sound-btn"
+        class="p-3 rounded-2xl glass-card text-neutral-700 hover:text-amber-800 transition-all hover:scale-105 active:scale-95 shadow-sm"
+        title="Toggle Nature Chimes">
+        <svg id="sound-icon-on" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+        </svg>
+        <svg id="sound-icon-off" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+        </svg>
+      </button>
+
+      <button id="theme-btn"
+        class="p-3 rounded-2xl glass-card text-neutral-700 hover:text-amber-800 transition-all hover:scale-105 active:scale-95 shadow-sm"
+        title="Change Lighting Mode">
+        <span id="theme-icon" class="text-lg">☀️</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Bottom Floating Dock -->
+  <div class="absolute bottom-6 left-0 right-0 z-20 flex justify-center items-center px-4 pointer-events-none">
+    <div
+      class="pointer-events-auto glass-card px-4 py-3 rounded-3xl flex items-center gap-3 sm:gap-4 shadow-xl border border-white/60 transition-all duration-500"
+      id="action-dock">
+      <button id="bloom-btn"
+        class="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-amber-100/80 hover:bg-amber-200/90 text-amber-900 font-medium text-sm transition-all hover:scale-105 active:scale-95 shadow-sm">
+        <span class="text-base">🌸</span>
+        <span class="hidden sm:inline">Add Blossom</span>
+        <span class="sm:hidden">Bloom</span>
+      </button>
+
+      <button id="water-btn"
+        class="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-cyan-100/80 hover:bg-cyan-200/90 text-cyan-900 font-medium text-sm transition-all hover:scale-105 active:scale-95 shadow-sm">
+        <span class="text-base">💧</span>
+        <span>Water</span>
+      </button>
+
+      <button id="letter-btn"
+        class="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-rose-100/80 hover:bg-rose-200/90 text-rose-900 font-medium text-sm transition-all hover:scale-105 active:scale-95 shadow-sm relative">
+        <span class="text-base">💌</span>
+        <span>Open Note</span>
+        <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 rounded-full animate-bounce"></span>
+      </button>
+    </div>
+  </div>
+
+  <div id="instruction-pill"
+    class="absolute bottom-24 left-1/2 -translate-x-1/2 z-20 pointer-events-none transition-opacity duration-700 pulse-hint">
+    <div
+      class="glass-card px-4 py-2 rounded-full text-xs font-medium text-neutral-600 flex items-center gap-2 shadow-sm">
+      <span>✨ Tap the ceramic pot to plant more flowers</span>
+    </div>
+  </div>
+
+  <!-- Note Modal -->
+  <div id="note-modal"
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-neutral-900/30 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
+    <div id="modal-box"
+      class="relative w-full max-w-md rounded-3xl p-6 sm:p-8 bg-amber-50/95 border border-amber-200/60 shadow-2xl text-neutral-800 modal-enter transition-all duration-300">
+      <div
+        class="w-12 h-12 rounded-full bg-rose-500/10 border border-rose-300/40 flex items-center justify-center mx-auto mb-4 text-2xl shadow-inner">
+        🌿
+      </div>
+
+      <div class="text-center mb-4">
+        <span class="text-[11px] uppercase tracking-widest text-amber-800/60 font-semibold">Special Delivery</span>
+        <h3 class="serif-title text-2xl font-bold text-amber-950 mt-1">Hey there!</h3>
+      </div>
+
+      <div
+        class="bg-white/80 rounded-2xl p-5 border border-amber-100 text-neutral-700 text-sm leading-relaxed mb-5 shadow-sm relative">
+        <p class="font-normal text-neutral-600 italic">
+          "Couldn't bring you real flowers. So here are some on your phone instead🌷"
+        </p>
+        <div class="mt-4 pt-3 border-t border-amber-100/80 flex items-center justify-between text-xs text-amber-900/70">
+          <span>Freshly Picked Today</span>
+          <span class="font-semibold">✨ Always Blooming</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button id="close-modal-btn"
+          class="flex-1 py-3 px-4 rounded-xl bg-amber-800 hover:bg-amber-900 text-white text-xs font-semibold tracking-wide transition-all active:scale-95 shadow-md">
+          Back to Bouquet
+        </button>
+      </div>
+
+      <button id="corner-close-btn"
+        class="absolute top-4 right-4 p-2 text-neutral-400 hover:text-neutral-700 rounded-full transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast"
+    class="fixed top-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 opacity-0 transform -translate-y-4">
+    <div
+      class="glass-card px-4 py-2 rounded-full text-xs font-medium text-neutral-800 shadow-lg border border-amber-200/50 flex items-center gap-2">
+      <span id="toast-icon">✨</span>
+      <span id="toast-text">Message</span>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
 </html>
