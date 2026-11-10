@@ -7,7 +7,7 @@
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="color-scheme" content="light only" />
   <meta name="supported-color-schemes" content="light" />
-  <title>A Little Bouquet for Mahdis</title>
+  <title>A Little Bouquet for you</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -52,11 +52,11 @@
       box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5) !important;
     }
 
-    /* Fixed header with horizontal safe-area padding */
+    /* Fixed top header with safe-area spacing */
     header {
-      padding-top: calc(1rem + env(safe-area-inset-top, 0px));
-      padding-left: calc(1rem + env(safe-area-inset-left, 0px));
-      padding-right: calc(1rem + env(safe-area-inset-right, 0px));
+      padding-top: calc(0.85rem + env(safe-area-inset-top, 0px));
+      padding-left: calc(0.85rem + env(safe-area-inset-left, 0px));
+      padding-right: calc(0.85rem + env(safe-area-inset-right, 0px));
     }
 
     #dock-container {
@@ -108,7 +108,7 @@
 
   <!-- Header -->
   <header class="fixed top-0 left-0 right-0 z-20 flex justify-between items-start gap-2 pointer-events-none">
-    <!-- Left Column (flexible container) -->
+    <!-- Left column: Title & Badge -->
     <div class="pointer-events-auto flex-1 min-w-0" id="title-wrapper">
       <div
         class="inline-flex items-center gap-2 px-3 py-1 rounded-full glass-card text-[11px] sm:text-xs font-semibold text-amber-950 mb-1.5 shadow-sm whitespace-nowrap"
@@ -118,16 +118,16 @@
         <span>Living Desktop Garden</span>
       </div>
 
-      <!-- Canvas title that conforms to available flex width -->
-      <div class="w-full max-w-[340px]">
+      <!-- Canvas title (immune to Android browser dark inversion) -->
+      <div class="w-full max-w-[320px]">
         <canvas id="title-canvas" class="w-full h-[68px] block"></canvas>
       </div>
     </div>
 
-    <!-- Right Controls: Guaranteed never to shrink or overflow viewport -->
-    <div class="pointer-events-auto flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+    <!-- Right Controls: Stacks vertically on mobile (flex-col), horizontal on larger screens (sm:flex-row) -->
+    <div class="pointer-events-auto flex flex-col sm:flex-row items-center gap-2 flex-shrink-0">
       <button id="sound-btn"
-        class="p-2.5 sm:p-3 rounded-2xl glass-card text-neutral-700 hover:text-amber-800 transition-all hover:scale-105 active:scale-95 shadow-sm"
+        class="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-2xl glass-card text-neutral-700 hover:text-amber-800 transition-all hover:scale-105 active:scale-95 shadow-sm"
         title="Toggle Nature Chimes">
         <svg id="sound-icon-on" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -142,14 +142,14 @@
       </button>
 
       <button id="theme-btn"
-        class="p-2.5 sm:p-3 rounded-2xl glass-card text-neutral-700 hover:text-amber-800 transition-all hover:scale-105 active:scale-95 shadow-sm"
+        class="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-2xl glass-card text-neutral-700 hover:text-amber-800 transition-all hover:scale-105 active:scale-95 shadow-sm"
         title="Change Lighting Mode">
         <span id="theme-icon" class="text-base sm:text-lg">☀️</span>
       </button>
     </div>
   </header>
 
-  <!-- Bottom Floating Dock + Tooltip stacked in single flex column -->
+  <!-- Bottom Floating Dock + Tooltip stacked naturally in single flex layout -->
   <div id="dock-container">
     <div id="instruction-pill" class="pulse-hint transition-opacity duration-700 pointer-events-none">
       <div
@@ -195,7 +195,7 @@
 
       <div class="text-center mb-4">
         <span class="text-[11px] uppercase tracking-widest text-amber-800/70 font-semibold">Special Delivery</span>
-        <h3 class="serif-title text-2xl font-bold text-amber-950 mt-1">Hey Mahdis,</h3>
+        <h3 class="serif-title text-2xl font-bold text-amber-950 mt-1">Hey there!</h3>
       </div>
 
       <div
