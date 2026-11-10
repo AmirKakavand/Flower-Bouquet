@@ -4,7 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="color-scheme" content="light">
   <title>A Little Bouquet for Mahdis</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -13,6 +15,11 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
+    :root {
+      color-scheme: light;
+      forced-color-adjust: none;
+    }
+
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       touch-action: none;
@@ -27,19 +34,19 @@
     }
 
     .glass-card {
-      background: rgba(255, 255, 255, 0.75);
+      background: rgba(255, 255, 255, 0.78);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.85);
       box-shadow: 0 10px 30px -5px rgba(180, 150, 130, 0.12), 0 4px 6px -2px rgba(180, 150, 130, 0.05);
     }
 
     .glass-card-night {
-      background: rgba(30, 32, 48, 0.8);
+      background: rgba(30, 32, 48, 0.85) !important;
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4) !important;
     }
 
     @keyframes subtlePulse {
@@ -77,27 +84,29 @@
   <div id="canvas-container" class="absolute inset-0 z-0"></div>
 
   <!-- Header -->
-  <header class="absolute top-0 left-0 right-0 z-20 p-5 sm:p-6 flex justify-between items-start pointer-events-none">
-    <div class="pointer-events-auto">
+  <header class="absolute top-0 left-0 right-0 z-20 p-4 sm:p-6 flex justify-between items-start pointer-events-none">
+    <div class="pointer-events-auto max-w-[70vw]">
       <div
-        class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-card text-xs font-medium text-amber-900/80 mb-2 transition-all duration-500"
+        class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-card text-xs font-semibold text-amber-950 mb-2 transition-all duration-500 shadow-sm"
         id="badge-pill">
         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
         <span class="w-2 h-2 rounded-full bg-emerald-500 -ml-4"></span>
         <span>Living Desktop Garden</span>
       </div>
-      <h1
-        class="serif-title text-2xl sm:text-3xl font-semibold tracking-tight text-neutral-800 transition-colors duration-500"
-        id="main-title">
+
+      <!-- Explicit inline styles for rock-solid contrast regardless of mobile browser forced dark-modes -->
+      <h1 class="serif-title text-2xl sm:text-3xl font-bold tracking-tight transition-colors duration-500"
+        id="main-title" style="color: #2c2c2c !important; -webkit-text-fill-color: #2c2c2c !important;">
         Some flowers for you
       </h1>
-      <p class="text-xs sm:text-sm text-neutral-500 font-normal mt-0.5" id="sub-title">
+      <p class="text-xs sm:text-sm font-medium mt-0.5 transition-colors duration-500" id="sub-title"
+        style="color: #555555 !important; -webkit-text-fill-color: #555555 !important;">
         Drag to spin • Tap the vase to blossom
       </p>
     </div>
 
     <!-- Quick Mode Buttons -->
-    <div class="pointer-events-auto flex items-center gap-2.5">
+    <div class="pointer-events-auto flex items-center gap-2">
       <button id="sound-btn"
         class="p-3 rounded-2xl glass-card text-neutral-700 hover:text-amber-800 transition-all hover:scale-105 active:scale-95 shadow-sm"
         title="Toggle Nature Chimes">
@@ -127,20 +136,20 @@
       class="pointer-events-auto glass-card px-4 py-3 rounded-3xl flex items-center gap-3 sm:gap-4 shadow-xl border border-white/60 transition-all duration-500"
       id="action-dock">
       <button id="bloom-btn"
-        class="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-amber-100/80 hover:bg-amber-200/90 text-amber-900 font-medium text-sm transition-all hover:scale-105 active:scale-95 shadow-sm">
+        class="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-amber-100/90 hover:bg-amber-200 text-amber-900 font-semibold text-sm transition-all hover:scale-105 active:scale-95 shadow-sm">
         <span class="text-base">🌸</span>
         <span class="hidden sm:inline">Add Blossom</span>
         <span class="sm:hidden">Bloom</span>
       </button>
 
       <button id="water-btn"
-        class="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-cyan-100/80 hover:bg-cyan-200/90 text-cyan-900 font-medium text-sm transition-all hover:scale-105 active:scale-95 shadow-sm">
+        class="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-cyan-100/90 hover:bg-cyan-200 text-cyan-900 font-semibold text-sm transition-all hover:scale-105 active:scale-95 shadow-sm">
         <span class="text-base">💧</span>
         <span>Water</span>
       </button>
 
       <button id="letter-btn"
-        class="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-rose-100/80 hover:bg-rose-200/90 text-rose-900 font-medium text-sm transition-all hover:scale-105 active:scale-95 shadow-sm relative">
+        class="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-rose-100/90 hover:bg-rose-200 text-rose-900 font-semibold text-sm transition-all hover:scale-105 active:scale-95 shadow-sm relative">
         <span class="text-base">💌</span>
         <span>Open Note</span>
         <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 rounded-full animate-bounce"></span>
@@ -149,16 +158,16 @@
   </div>
 
   <div id="instruction-pill"
-    class="absolute bottom-24 left-1/2 -translate-x-1/2 z-20 pointer-events-none transition-opacity duration-700 pulse-hint">
+    class="absolute bottom-24 right-4 sm:right-auto sm:left-1/2 sm:-translate-x-1/2 z-20 pointer-events-none transition-opacity duration-700 pulse-hint">
     <div
-      class="glass-card px-4 py-2 rounded-full text-xs font-medium text-neutral-600 flex items-center gap-2 shadow-sm">
+      class="glass-card px-4 py-2 rounded-full text-xs font-semibold text-neutral-700 flex items-center gap-2 shadow-sm">
       <span>✨ Tap the ceramic pot to plant more flowers</span>
     </div>
   </div>
 
   <!-- Note Modal -->
   <div id="note-modal"
-    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-neutral-900/30 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-neutral-900/40 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
     <div id="modal-box"
       class="relative w-full max-w-md rounded-3xl p-6 sm:p-8 bg-amber-50/95 border border-amber-200/60 shadow-2xl text-neutral-800 modal-enter transition-all duration-300">
       <div
@@ -167,14 +176,18 @@
       </div>
 
       <div class="text-center mb-4">
-        <span class="text-[11px] uppercase tracking-widest text-amber-800/60 font-semibold">Special Delivery</span>
-        <h3 class="serif-title text-2xl font-bold text-amber-950 mt-1">Hey there!</h3>
+        <span class="text-[11px] uppercase tracking-widest text-amber-800/70 font-semibold">Special Delivery</span>
+        <h3 class="serif-title text-2xl font-bold text-amber-950 mt-1">Hey Mahdis,</h3>
       </div>
 
       <div
-        class="bg-white/80 rounded-2xl p-5 border border-amber-100 text-neutral-700 text-sm leading-relaxed mb-5 shadow-sm relative">
+        class="bg-white/85 rounded-2xl p-5 border border-amber-100 text-neutral-700 text-sm leading-relaxed mb-5 shadow-sm relative">
+        <p class="mb-3">
+          Here is a handcrafted, zero-water mini desk bouquet guaranteed never to wilt, drop petals on your keyboard, or
+          need sunlight.
+        </p>
         <p class="font-normal text-neutral-600 italic">
-          "Couldn't bring you real flowers. So here are some on your phone instead🌷"
+          "Just a tiny reminder to take a deep breath, stretch, and have an amazing day ahead."
         </p>
         <div class="mt-4 pt-3 border-t border-amber-100/80 flex items-center justify-between text-xs text-amber-900/70">
           <span>Freshly Picked Today</span>
@@ -183,6 +196,15 @@
       </div>
 
       <div class="flex items-center gap-3">
+        <button id="copy-note-btn"
+          class="flex-1 py-3 px-4 rounded-xl border border-amber-300 hover:bg-amber-100/50 text-amber-900 text-xs font-semibold tracking-wide transition-all active:scale-95 flex items-center justify-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+          </svg>
+          <span id="copy-text">Copy Sweet Note</span>
+        </button>
+
         <button id="close-modal-btn"
           class="flex-1 py-3 px-4 rounded-xl bg-amber-800 hover:bg-amber-900 text-white text-xs font-semibold tracking-wide transition-all active:scale-95 shadow-md">
           Back to Bouquet

@@ -193,11 +193,20 @@ function toggleAtmosphere(): void {
     bouquetGlow.color.setHex(0xFFD8A8);
     document.body.style.backgroundColor = '#1E1B2E';
     if (themeBtn) themeBtn.innerHTML = '🌙';
-    mainTitle?.classList.replace('text-neutral-800', 'text-purple-100');
-    subTitle?.classList.replace('text-neutral-500', 'text-purple-300');
+
+    // Override inline styles with forced light-purple for night mode
+    if (mainTitle) {
+      mainTitle.style.setProperty('color', '#f3e8ff', 'important');
+      mainTitle.style.setProperty('-webkit-text-fill-color', '#f3e8ff', 'important');
+    }
+    if (subTitle) {
+      subTitle.style.setProperty('color', '#d8b4fe', 'important');
+      subTitle.style.setProperty('-webkit-text-fill-color', '#d8b4fe', 'important');
+    }
+
     actionDock?.classList.replace('glass-card', 'glass-card-night');
     badgePill?.classList.replace('glass-card', 'glass-card-night');
-    badgePill?.classList.replace('text-amber-900/80', 'text-purple-200');
+    badgePill?.classList.replace('text-amber-950', 'text-purple-200');
     showToast("Dreamy twilight mode", "✨");
   } else {
     sunLight.intensity = 1.35;
@@ -206,11 +215,20 @@ function toggleAtmosphere(): void {
     bouquetGlow.color.setHex(0xffd1a4);
     document.body.style.backgroundColor = '#FAF5EE';
     if (themeBtn) themeBtn.innerHTML = '☀️';
-    mainTitle?.classList.replace('text-purple-100', 'text-neutral-800');
-    subTitle?.classList.replace('text-purple-300', 'text-neutral-500');
+
+    // Reset inline styles back to charcoal for day mode
+    if (mainTitle) {
+      mainTitle.style.setProperty('color', '#2c2c2c', 'important');
+      mainTitle.style.setProperty('-webkit-text-fill-color', '#2c2c2c', 'important');
+    }
+    if (subTitle) {
+      subTitle.style.setProperty('color', '#555555', 'important');
+      subTitle.style.setProperty('-webkit-text-fill-color', '#555555', 'important');
+    }
+
     actionDock?.classList.replace('glass-card-night', 'glass-card');
     badgePill?.classList.replace('glass-card-night', 'glass-card');
-    badgePill?.classList.replace('text-purple-200', 'text-amber-900/80');
+    badgePill?.classList.replace('text-purple-200', 'text-amber-950');
     showToast("Warm afternoon sunshine", "☀️");
   }
 }
@@ -336,7 +354,6 @@ function animate(): void {
     fl.rotation.x = Math.cos(elapsedTime * 1.4 + i) * 0.035;
   }
 
-  // Gentle pendulum swing along the front of the vase
   tagGroup.rotation.z = -0.06 + Math.sin(elapsedTime * 2.2) * 0.04;
 
   const pos = particleGeo.attributes.position.array as Float32Array;
