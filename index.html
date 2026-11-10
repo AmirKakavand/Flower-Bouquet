@@ -7,7 +7,7 @@
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="color-scheme" content="light only" />
   <meta name="supported-color-schemes" content="light" />
-  <title>A Little Bouquet for you</title>
+  <title>A Little Bouquet for Mahdis</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -50,6 +50,13 @@
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.15) !important;
       box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    /* Fixed header with horizontal safe-area padding */
+    header {
+      padding-top: calc(1rem + env(safe-area-inset-top, 0px));
+      padding-left: calc(1rem + env(safe-area-inset-left, 0px));
+      padding-right: calc(1rem + env(safe-area-inset-right, 0px));
     }
 
     #dock-container {
@@ -100,26 +107,27 @@
   <div id="canvas-container" class="absolute inset-0 z-0"></div>
 
   <!-- Header -->
-  <header class="fixed top-0 left-0 right-0 z-20 p-4 sm:p-6 flex justify-between items-start pointer-events-none">
-    <div class="pointer-events-auto">
+  <header class="fixed top-0 left-0 right-0 z-20 flex justify-between items-start gap-2 pointer-events-none">
+    <!-- Left Column (flexible container) -->
+    <div class="pointer-events-auto flex-1 min-w-0" id="title-wrapper">
       <div
-        class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-card text-xs font-semibold text-amber-950 mb-2 shadow-sm"
+        class="inline-flex items-center gap-2 px-3 py-1 rounded-full glass-card text-[11px] sm:text-xs font-semibold text-amber-950 mb-1.5 shadow-sm whitespace-nowrap"
         id="badge-pill">
         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
         <span class="w-2 h-2 rounded-full bg-emerald-500 -ml-4"></span>
         <span>Living Desktop Garden</span>
       </div>
 
-      <!-- Canvas-rendered Title: Immune to OS & Browser Force Dark Mode -->
-      <div class="block">
-        <canvas id="title-canvas" class="w-[280px] sm:w-[360px] h-[72px]"></canvas>
+      <!-- Canvas title that conforms to available flex width -->
+      <div class="w-full max-w-[340px]">
+        <canvas id="title-canvas" class="w-full h-[68px] block"></canvas>
       </div>
     </div>
 
-    <!-- Quick Mode Buttons -->
-    <div class="pointer-events-auto flex items-center gap-2">
+    <!-- Right Controls: Guaranteed never to shrink or overflow viewport -->
+    <div class="pointer-events-auto flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
       <button id="sound-btn"
-        class="p-3 rounded-2xl glass-card text-neutral-700 hover:text-amber-800 transition-all hover:scale-105 active:scale-95 shadow-sm"
+        class="p-2.5 sm:p-3 rounded-2xl glass-card text-neutral-700 hover:text-amber-800 transition-all hover:scale-105 active:scale-95 shadow-sm"
         title="Toggle Nature Chimes">
         <svg id="sound-icon-on" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -134,14 +142,14 @@
       </button>
 
       <button id="theme-btn"
-        class="p-3 rounded-2xl glass-card text-neutral-700 hover:text-amber-800 transition-all hover:scale-105 active:scale-95 shadow-sm"
+        class="p-2.5 sm:p-3 rounded-2xl glass-card text-neutral-700 hover:text-amber-800 transition-all hover:scale-105 active:scale-95 shadow-sm"
         title="Change Lighting Mode">
-        <span id="theme-icon" class="text-lg">☀️</span>
+        <span id="theme-icon" class="text-base sm:text-lg">☀️</span>
       </button>
     </div>
   </header>
 
-  <!-- Bottom Floating Dock + Tooltip stacked naturally in one flex layout -->
+  <!-- Bottom Floating Dock + Tooltip stacked in single flex column -->
   <div id="dock-container">
     <div id="instruction-pill" class="pulse-hint transition-opacity duration-700 pointer-events-none">
       <div
@@ -187,7 +195,7 @@
 
       <div class="text-center mb-4">
         <span class="text-[11px] uppercase tracking-widest text-amber-800/70 font-semibold">Special Delivery</span>
-        <h3 class="serif-title text-2xl font-bold text-amber-950 mt-1">Hey there!</h3>
+        <h3 class="serif-title text-2xl font-bold text-amber-950 mt-1">Hey Mahdis,</h3>
       </div>
 
       <div

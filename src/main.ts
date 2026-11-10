@@ -39,8 +39,8 @@ function renderTitleCanvas(): void {
 
   const dpr = Math.min(window.devicePixelRatio, 2);
   const rect = titleCanvas.getBoundingClientRect();
-  const width = rect.width || 320;
-  const height = rect.height || 72;
+  const width = Math.max(rect.width || 240, 220);
+  const height = rect.height || 68;
 
   titleCanvas.width = width * dpr;
   titleCanvas.height = height * dpr;
@@ -48,15 +48,15 @@ function renderTitleCanvas(): void {
 
   ctx.clearRect(0, 0, width, height);
 
-  // Main Header (Serif)
-  ctx.font = '700 24px "Playfair Display", Georgia, serif';
-  ctx.fillStyle = isNight ? '#F3E8FF' : '#2D2D2D'; // Sharp crisp dark charcoal in daytime
-  ctx.fillText('Some flowers for you', 0, 32);
+  // Scaled title to fit narrow phones comfortably
+  const titleSize = width < 280 ? 20 : 23;
+  ctx.font = `700 ${titleSize}px "Playfair Display", Georgia, serif`;
+  ctx.fillStyle = isNight ? '#F3E8FF' : '#2D2D2D';
+  ctx.fillText('Some flowers for you', 0, 28);
 
-  // Subtitle (Sans-serif)
-  ctx.font = '500 12.5px "Plus Jakarta Sans", sans-serif';
+  ctx.font = '500 11.5px "Plus Jakarta Sans", sans-serif';
   ctx.fillStyle = isNight ? '#D8B4FE' : '#5A5A5A';
-  ctx.fillText('Drag to spin • Tap the vase to blossom', 0, 56);
+  ctx.fillText('Drag to spin • Tap the vase to blossom', 0, 52);
 }
 
 // Render once Google Fonts are loaded
