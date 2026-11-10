@@ -7,7 +7,7 @@
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="color-scheme" content="light only" />
   <meta name="supported-color-schemes" content="light" />
-  <title>A Little Bouquet for Mahdis</title>
+  <title>A Little Bouquet for you</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -27,7 +27,6 @@
       width: 100%;
       height: 100%;
       height: 100dvh;
-      /* Dynamic viewport height respects mobile navigation bars */
       margin: 0;
       padding: 0;
       overflow: hidden;
@@ -38,40 +37,31 @@
     }
 
     .glass-card {
-      background: rgba(255, 255, 255, 0.82) !important;
+      background: rgba(255, 255, 255, 0.85) !important;
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.85) !important;
+      border: 1px solid rgba(255, 255, 255, 0.9) !important;
       box-shadow: 0 10px 30px -5px rgba(180, 150, 130, 0.15);
     }
 
     .glass-card-night {
-      background: rgba(30, 32, 48, 0.88) !important;
+      background: rgba(30, 32, 48, 0.9) !important;
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.15) !important;
       box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5) !important;
     }
 
-    /* Fixed bottom dock that respects mobile browser toolbars and home indicator safe areas */
-    #dock-wrapper {
+    #dock-container {
       position: fixed;
       left: 0;
       right: 0;
-      bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+      bottom: calc(1.2rem + env(safe-area-inset-bottom, 0px));
       z-index: 40;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      pointer-events: none;
-    }
-
-    #instruction-pill {
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: calc(5.2rem + env(safe-area-inset-bottom, 0px));
-      z-index: 30;
+      gap: 0.65rem;
       pointer-events: none;
     }
 
@@ -80,7 +70,7 @@
       0%,
       100% {
         transform: scale(1);
-        opacity: 0.9;
+        opacity: 0.92;
       }
 
       50% {
@@ -113,25 +103,16 @@
   <header class="fixed top-0 left-0 right-0 z-20 p-4 sm:p-6 flex justify-between items-start pointer-events-none">
     <div class="pointer-events-auto">
       <div
-        class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-card text-xs font-semibold text-amber-950 mb-2 transition-all duration-500 shadow-sm"
+        class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-card text-xs font-semibold text-amber-950 mb-2 shadow-sm"
         id="badge-pill">
         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
         <span class="w-2 h-2 rounded-full bg-emerald-500 -ml-4"></span>
         <span>Living Desktop Garden</span>
       </div>
 
-      <!-- Vector SVG Title: completely immune to mobile browser dark-mode color inversion -->
-      <div class="w-[280px] sm:w-[360px]">
-        <svg viewBox="0 0 360 70" class="w-full h-auto overflow-visible select-none" xmlns="http://www.w3.org/2000/svg">
-          <text id="svg-main-title" x="0" y="32" font-family="'Playfair Display', serif" font-size="28"
-            font-weight="700" fill="#2c2c2c" style="transition: fill 0.5s ease;">
-            Some flowers for you
-          </text>
-          <text id="svg-sub-title" x="0" y="58" font-family="'Plus Jakarta Sans', sans-serif" font-size="13"
-            font-weight="500" fill="#555555" style="transition: fill 0.5s ease;">
-            Drag to spin • Tap the vase to blossom
-          </text>
-        </svg>
+      <!-- Canvas-rendered Title: Immune to OS & Browser Force Dark Mode -->
+      <div class="block">
+        <canvas id="title-canvas" class="w-[280px] sm:w-[360px] h-[72px]"></canvas>
       </div>
     </div>
 
@@ -160,8 +141,15 @@
     </div>
   </header>
 
-  <!-- Bottom Floating Dock (Anchored with fixed safe-area) -->
-  <div id="dock-wrapper">
+  <!-- Bottom Floating Dock + Tooltip stacked naturally in one flex layout -->
+  <div id="dock-container">
+    <div id="instruction-pill" class="pulse-hint transition-opacity duration-700 pointer-events-none">
+      <div
+        class="glass-card px-4 py-2 rounded-full text-xs font-semibold text-neutral-800 flex items-center gap-2 shadow-sm whitespace-nowrap">
+        <span>✨ Tap the ceramic pot to plant more flowers</span>
+      </div>
+    </div>
+
     <div
       class="pointer-events-auto glass-card px-4 py-2.5 sm:py-3 rounded-3xl flex items-center gap-3 sm:gap-4 shadow-xl border border-white/60 transition-all duration-500"
       id="action-dock">
@@ -187,13 +175,6 @@
     </div>
   </div>
 
-  <div id="instruction-pill" class="pulse-hint transition-opacity duration-700">
-    <div
-      class="glass-card px-4 py-2 rounded-full text-xs font-semibold text-neutral-700 flex items-center gap-2 shadow-sm whitespace-nowrap">
-      <span>✨ Tap the ceramic pot to plant more flowers</span>
-    </div>
-  </div>
-
   <!-- Note Modal Envelope -->
   <div id="note-modal"
     class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-neutral-900/40 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
@@ -206,7 +187,7 @@
 
       <div class="text-center mb-4">
         <span class="text-[11px] uppercase tracking-widest text-amber-800/70 font-semibold">Special Delivery</span>
-        <h3 class="serif-title text-2xl font-bold text-amber-950 mt-1">Hey Mahdis,</h3>
+        <h3 class="serif-title text-2xl font-bold text-amber-950 mt-1">Hey there!</h3>
       </div>
 
       <div

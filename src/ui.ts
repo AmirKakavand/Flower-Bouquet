@@ -69,7 +69,7 @@ export function setupUI(
     });
 
     copyNoteBtn?.addEventListener('click', () => {
-        const noteContent = "Specially cultivated for Mahdis — a tiny, zero-water desk plant guaranteed not to wilt. Hope it brought a smile to your day!";
+        const noteContent = "Specially cultivated for you!";
         const el = document.createElement('textarea');
         el.value = noteContent;
         document.body.appendChild(el);

@@ -28,6 +28,42 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.05;
 container.appendChild(renderer.domElement);
 
+// --- High-DPI Canvas Text Engine (Immune to Browser Dark-Mode Inversion) ---
+const titleCanvas = document.getElementById('title-canvas') as HTMLCanvasElement;
+let isNight = false;
+
+function renderTitleCanvas(): void {
+  if (!titleCanvas) return;
+  const ctx = titleCanvas.getContext('2d');
+  if (!ctx) return;
+
+  const dpr = Math.min(window.devicePixelRatio, 2);
+  const rect = titleCanvas.getBoundingClientRect();
+  const width = rect.width || 320;
+  const height = rect.height || 72;
+
+  titleCanvas.width = width * dpr;
+  titleCanvas.height = height * dpr;
+  ctx.scale(dpr, dpr);
+
+  ctx.clearRect(0, 0, width, height);
+
+  // Main Header (Serif)
+  ctx.font = '700 24px "Playfair Display", Georgia, serif';
+  ctx.fillStyle = isNight ? '#F3E8FF' : '#2D2D2D'; // Sharp crisp dark charcoal in daytime
+  ctx.fillText('Some flowers for you', 0, 32);
+
+  // Subtitle (Sans-serif)
+  ctx.font = '500 12.5px "Plus Jakarta Sans", sans-serif';
+  ctx.fillStyle = isNight ? '#D8B4FE' : '#5A5A5A';
+  ctx.fillText('Drag to spin • Tap the vase to blossom', 0, 56);
+}
+
+// Render once Google Fonts are loaded
+document.fonts.ready.then(() => {
+  renderTitleCanvas();
+});
+
 // --- Lighting Rig ---
 const ambientLight = new THREE.AmbientLight(0xfff3e6, 0.75);
 scene.add(ambientLight);
@@ -167,14 +203,13 @@ function triggerWatering(): void {
 }
 
 // --- Atmosphere Theme ---
-let isNight = false;
 function toggleAtmosphere(): void {
   isNight = !isNight;
   const themeBtn = document.getElementById('theme-btn');
   const badgePill = document.getElementById('badge-pill');
   const actionDock = document.getElementById('action-dock');
-  const svgMainTitle = document.getElementById('svg-main-title');
-  const svgSubTitle = document.getElementById('svg-sub-title');
+
+  renderTitleCanvas(); // Re-render canvas text colors immediately
 
   const targetBg = new THREE.Color(isNight ? NIGHT_BG : DAY_BG);
   const targetSunColor = new THREE.Color(isNight ? 0xB5C5FF : 0xfffaed);
@@ -194,10 +229,6 @@ function toggleAtmosphere(): void {
     document.body.style.backgroundColor = '#1E1B2E';
     if (themeBtn) themeBtn.innerHTML = '🌙';
 
-    // SVG fills for night mode (immune to browser inversion)
-    svgMainTitle?.setAttribute('fill', '#f3e8ff');
-    svgSubTitle?.setAttribute('fill', '#d8b4fe');
-
     actionDock?.classList.replace('glass-card', 'glass-card-night');
     badgePill?.classList.replace('glass-card', 'glass-card-night');
     badgePill?.classList.replace('text-amber-950', 'text-purple-200');
@@ -209,10 +240,6 @@ function toggleAtmosphere(): void {
     bouquetGlow.color.setHex(0xffd1a4);
     document.body.style.backgroundColor = '#FAF5EE';
     if (themeBtn) themeBtn.innerHTML = '☀️';
-
-    // SVG fills for day mode
-    svgMainTitle?.setAttribute('fill', '#2c2c2c');
-    svgSubTitle?.setAttribute('fill', '#555555');
 
     actionDock?.classList.replace('glass-card-night', 'glass-card');
     badgePill?.classList.replace('glass-card-night', 'glass-card');
@@ -319,6 +346,7 @@ window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
+  renderTitleCanvas();
 });
 
 // --- Render Loop ---
